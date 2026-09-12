@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+*/node_modules/
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Expo & React Native
+.expo/
+*/.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+*.tsbuildinfo
+/ios
+/android
+
+# Python / Django
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment variables
+.env
+.env*.local
+
+# IDE & Editor files
+.vscode/
+.idea/
+.claude/
+.gemini/
+*.swp
+*.swo
+
+# Operating System
+.DS_Store
+Thumbs.db
+Desktop.ini

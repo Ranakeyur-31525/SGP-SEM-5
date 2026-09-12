@@ -1,0 +1,107 @@
+[
+  {
+    "_id": "6aa2f21d85f4e94632980b4e",
+    "robot_id": "MB-01",
+    "status": "TRANSIT",
+    "current_floor": 2,
+    "current_junction": 4,
+    "target_bed": 12,
+    "lidar": {
+      "distance_cm": 148,
+      "signal_strength": 2850,
+      "brake_engaged": false,
+      "sensor_healthy": true
+    },
+    "power": {
+      "battery_voltage": 8.12,
+      "battery_percentage": 86,
+      "step_down_rail_5v": 5.02,
+      "is_rail_normal": true,
+      "estimated_runtime_minutes": 140
+    },
+    "hatch_state": "UNLOCKED",
+    "ir_array": {
+      "sensor1": 0,
+      "sensor2": 0,
+      "sensor3": 1,
+      "sensor4": 0,
+      "sensor5": 0
+    },
+    "elevator_handshake": {
+      "active_relay_floor": 2,
+      "door_status": "CLOSED",
+      "is_interlocked": true,
+      "cabin_status": "LEVEL"
+    }
+  },
+  {
+    "_id": "6aa383d9b83e6426d178221e",
+    "robot_id": "MB-01",
+    "status": "NAVIGATING",
+    "current_floor": 2,
+    "current_junction": 4,
+    "target_bed": 12,
+    "lidar": {
+      "distance_cm": 148,
+      "signal_strength": 2850,
+      "brake_engaged": false,
+      "sensor_healthy": true
+    },
+    "power": {
+      "battery_voltage": 8.12,
+      "battery_percentage": 86,
+      "step_down_rail_5v": 5.02,
+      "is_rail_normal": true,
+      "estimated_runtime_minutes": 140
+    },
+    "hatch_state": "LOCKED",
+    "ir_array": {
+      "sensor1": 0,
+      "sensor2": 0,
+      "sensor3": 1,
+      "sensor4": 0,
+      "sensor5": 0
+    },
+    "elevator_handshake": {
+      "active_relay_floor": 2,
+      "door_status": "CLOSED",
+      "is_interlocked": true,
+      "cabin_status": "LEVEL"
+    }
+  },
+  {
+    "_id": "6aa39fb981ab9994dfbc6620",
+    "robot_id": "MB-01",
+    "status": "NAVIGATING",
+    "current_floor": 2,
+    "current_junction": 4,
+    "target_bed": 12,
+    "lidar": {
+      "distance_cm": 148,
+      "signal_strength": 2850,
+      "brake_engaged": false,
+      "sensor_healthy": true
+    },
+    "power": {
+      "battery_voltage": 8.12,
+      "battery_percentage": 86,
+      "step_down_rail_5v": 5.02,
+      "is_rail_normal": true,
+      "estimated_runtime_minutes": 140
+    },
+    "hatch_state": "LOCKED",
+    "ir_array": {
+      "sensor1": 0,
+      "sensor2": 0,
+      "sensor3": 1,
+      "sensor4": 0,
+      "sensor5": 0
+    },
+    "elevator_handshake": {
+      "active_relay_floor": 2,
+      "door_status": "CLOSED",
+      "is_interlocked": true,
+      "cabin_status": "LEVEL"
+    }
+  }
+]

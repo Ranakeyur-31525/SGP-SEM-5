@@ -1,0 +1,149 @@
+[
+  {
+    "_id": "6aa2f21d85f4e94632980b4f",
+    "order_id": "ORD-9421",
+    "patient_id": "usr_pat_12",
+    "patient_name": "Ramesh Sharma",
+    "patient_floor": 2,
+    "patient_bed": 12,
+    "ordered_by_role": "patient",
+    "order_type": "text_input",
+    "items_list": [
+      "Paracetamol 650mg (Oral)",
+      "Saline D5 IV 500mL",
+      "Surgical Cotton Gauze Roll"
+    ],
+    "items": [],
+    "subtotal": 0.0,
+    "order_status": "pending",
+    "created_at": "10:15:20 AM"
+  },
+  {
+    "_id": "6aa2f21d85f4e94632980b50",
+    "order_id": "ORD-9419",
+    "patient_id": "usr_pat_24",
+    "patient_name": "Kavita Singh",
+    "patient_floor": 2,
+    "patient_bed": 24,
+    "ordered_by_role": "patient",
+    "order_type": "prescription_upload",
+    "items_list": [
+      "Prescription Attachment #412"
+    ],
+    "items": [
+      {
+        "name": "Paracetamol IV 1000mg Infusion",
+        "price": 220
+      },
+      {
+        "name": "Normal Saline 500mL",
+        "price": 120
+      },
+      {
+        "name": "MediBot Autonomous Delivery Fee",
+        "price": 50
+      }
+    ],
+    "subtotal": 390.0,
+    "order_status": "completed",
+    "created_at": "09:20:10 AM"
+  },
+  {
+    "_id": "6aa383d9b83e6426d178221f",
+    "order_id": "ORD-9421",
+    "patient_id": "usr_pat_12",
+    "patient_name": "Ramesh Sharma",
+    "patient_floor": 2,
+    "patient_bed": 12,
+    "ordered_by_role": "patient",
+    "order_type": "text_input",
+    "items_list": [
+      "Paracetamol 650mg (Oral)",
+      "Saline D5 IV 500mL",
+      "Surgical Cotton Gauze Roll"
+    ],
+    "items": [],
+    "subtotal": 0.0,
+    "order_status": "pending",
+    "created_at": "10:15:20 AM"
+  },
+  {
+    "_id": "6aa383d9b83e6426d1782220",
+    "order_id": "ORD-9419",
+    "patient_id": "usr_pat_24",
+    "patient_name": "Kavita Singh",
+    "patient_floor": 2,
+    "patient_bed": 24,
+    "ordered_by_role": "patient",
+    "order_type": "prescription_upload",
+    "items_list": [
+      "Prescription Attachment #412"
+    ],
+    "items": [
+      {
+        "name": "Paracetamol IV 1000mg Infusion",
+        "price": 220
+      },
+      {
+        "name": "Normal Saline 500mL",
+        "price": 120
+      },
+      {
+        "name": "MediBot Autonomous Delivery Fee",
+        "price": 50
+      }
+    ],
+    "subtotal": 390.0,
+    "order_status": "completed",
+    "created_at": "09:20:10 AM"
+  },
+  {
+    "_id": "6aa39fb981ab9994dfbc6621",
+    "order_id": "ORD-9421",
+    "patient_id": "usr_pat_12",
+    "patient_name": "Ramesh Sharma",
+    "patient_floor": 2,
+    "patient_bed": 12,
+    "ordered_by_role": "patient",
+    "order_type": "text_input",
+    "items_list": [
+      "Paracetamol 650mg (Oral)",
+      "Saline D5 IV 500mL",
+      "Surgical Cotton Gauze Roll"
+    ],
+    "items": [],
+    "subtotal": 0.0,
+    "order_status": "pending",
+    "created_at": "10:15:20 AM"
+  },
+  {
+    "_id": "6aa39fb981ab9994dfbc6622",
+    "order_id": "ORD-9419",
+    "patient_id": "usr_pat_24",
+    "patient_name": "Kavita Singh",
+    "patient_floor": 2,
+    "patient_bed": 24,
+    "ordered_by_role": "patient",
+    "order_type": "prescription_upload",
+    "items_list": [
+      "Prescription Attachment #412"
+    ],
+    "items": [
+      {
+        "name": "Paracetamol IV 1000mg Infusion",
+        "price": 220
+      },
+      {
+        "name": "Normal Saline 500mL",
+        "price": 120
+      },
+      {
+        "name": "MediBot Autonomous Delivery Fee",
+        "price": 50
+      }
+    ],
+    "subtotal": 390.0,
+    "order_status": "completed",
+    "created_at": "09:20:10 AM"
+  }
+]

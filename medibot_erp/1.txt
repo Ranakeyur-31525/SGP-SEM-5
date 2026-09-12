@@ -1,0 +1,11 @@
+the supplies should only add and restoke by the chemist
+and docter should only apply for new medicine to the chemist
+chemist can add that to the hospital madical list and 
+change the APP AND WEB FLOW
+smalland beauityful welcome animation
+the main home page 
+the login register page with demo users
+and then all pages but now seperate all users properly
+and also facing themme issues like if in light theme many thing still remian dark and 
+while dark many things are still light 
+and please i request to do everthing properly and manage everything properly

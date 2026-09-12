@@ -1,0 +1,278 @@
+[
+  {
+    "_id": "6aa2f21d85f4e94632980b51",
+    "patient_id": "PAT-2026-0412",
+    "bed_number": 12,
+    "patient_name": "Ramesh Sharma",
+    "room_charges": 3600.0,
+    "medicine_charges": 1845.0,
+    "robot_logistics_fee": 2100.0,
+    "subtotal": 7545.0,
+    "tax": 377.25,
+    "total": 7922.25,
+    "line_items": [
+      {
+        "description": "Cardiology ICU Bed (Per Diem x 3)",
+        "quantity": 3,
+        "unitPrice": 1200.0,
+        "total": 3600.0
+      },
+      {
+        "description": "Adrenaline 1mg/mL Ampoule (STAT Delivery)",
+        "quantity": 2,
+        "unitPrice": 145.0,
+        "total": 290.0
+      },
+      {
+        "description": "Meropenem 1g IV Infusion",
+        "quantity": 1,
+        "unitPrice": 890.0,
+        "total": 890.0
+      },
+      {
+        "description": "Atropine Sulfate 0.6mg/mL Ampoule",
+        "quantity": 1,
+        "unitPrice": 85.0,
+        "total": 85.0
+      },
+      {
+        "description": "Normal Saline (0.9% NaCl) 500mL",
+        "quantity": 3,
+        "unitPrice": 60.0,
+        "total": 180.0
+      },
+      {
+        "description": "MediBot ESP32 Autonomous Sterilized Dispatch Fee",
+        "quantity": 3,
+        "unitPrice": 50.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "SG90 Autonomous Payload Delivery [DEL-5655]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "SG90 Autonomous Payload Delivery [DEL-5926]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Autonomous SG90 Hatch Delivery Fee [ORD-9421]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      },
+      {
+        "description": "Bed #12 Rapid Turnaround & UV-C Disinfection",
+        "quantity": 1,
+        "unitPrice": 150.0,
+        "total": 150.0
+      },
+      {
+        "description": "SG90 Autonomous Payload Delivery [DEL-2304]",
+        "quantity": 1,
+        "unitPrice": 50.0,
+        "total": 50.0
+      }
+    ]
+  },
+  {
+    "_id": "6aa383d9b83e6426d1782221",
+    "patient_id": "PAT-2026-0412",
+    "bed_number": 12,
+    "patient_name": "Ramesh Sharma",
+    "room_charges": 3600.0,
+    "medicine_charges": 1845.0,
+    "robot_logistics_fee": 150.0,
+    "subtotal": 5595.0,
+    "tax": 279.75,
+    "total": 5874.75,
+    "line_items": [
+      {
+        "description": "Cardiology ICU Bed (Per Diem x 3)",
+        "quantity": 3,
+        "unitPrice": 1200.0,
+        "total": 3600.0
+      },
+      {
+        "description": "Adrenaline 1mg/mL Ampoule (STAT Delivery)",
+        "quantity": 2,
+        "unitPrice": 145.0,
+        "total": 290.0
+      },
+      {
+        "description": "Meropenem 1g IV Infusion",
+        "quantity": 1,
+        "unitPrice": 890.0,
+        "total": 890.0
+      },
+      {
+        "description": "Atropine Sulfate 0.6mg/mL Ampoule",
+        "quantity": 1,
+        "unitPrice": 85.0,
+        "total": 85.0
+      },
+      {
+        "description": "Normal Saline (0.9% NaCl) 500mL",
+        "quantity": 3,
+        "unitPrice": 60.0,
+        "total": 180.0
+      },
+      {
+        "description": "MediBot ESP32 Autonomous Sterilized Dispatch Fee",
+        "quantity": 3,
+        "unitPrice": 50.0,
+        "total": 150.0
+      }
+    ]
+  },
+  {
+    "_id": "6aa39fb981ab9994dfbc6623",
+    "patient_id": "PAT-2026-0412",
+    "bed_number": 12,
+    "patient_name": "Ramesh Sharma",
+    "room_charges": 3600.0,
+    "medicine_charges": 1845.0,
+    "robot_logistics_fee": 150.0,
+    "subtotal": 5595.0,
+    "tax": 279.75,
+    "total": 5874.75,
+    "line_items": [
+      {
+        "description": "Cardiology ICU Bed (Per Diem x 3)",
+        "quantity": 3,
+        "unitPrice": 1200.0,
+        "total": 3600.0
+      },
+      {
+        "description": "Adrenaline 1mg/mL Ampoule (STAT Delivery)",
+        "quantity": 2,
+        "unitPrice": 145.0,
+        "total": 290.0
+      },
+      {
+        "description": "Meropenem 1g IV Infusion",
+        "quantity": 1,
+        "unitPrice": 890.0,
+        "total": 890.0
+      },
+      {
+        "description": "Atropine Sulfate 0.6mg/mL Ampoule",
+        "quantity": 1,
+        "unitPrice": 85.0,
+        "total": 85.0
+      },
+      {
+        "description": "Normal Saline (0.9% NaCl) 500mL",
+        "quantity": 3,
+        "unitPrice": 60.0,
+        "total": 180.0
+      },
+      {
+        "description": "MediBot ESP32 Autonomous Sterilized Dispatch Fee",
+        "quantity": 3,
+        "unitPrice": 50.0,
+        "total": 150.0
+      }
+    ]
+  }
+]

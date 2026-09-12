@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDIBOT OS | Enterprise Hospital Logistics & Autonomous Robotics Console</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                            900: '#164e63',
+                        },
+                        medical: {
+                            emerald: '#10b981',
+                            cyan: '#06b6d4',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b',
+                            indigo: '#6366f1',
+                            slate: '#070b14',
+                            card: '#0f172a',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Alpine.js for Interactive Single Page App Controls -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #070b14;
+            color: #f8fafc;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-header {
+            background: rgba(7, 11, 20, 0.90);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+        }
+        .pulse-emerald {
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.85);
+        }
+        .pulse-cyan {
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.85);
+        }
+        .pulse-rose {
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.85);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        @keyframes radar-sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .radar-beam {
+            animation: radar-sweep 2.5s linear infinite;
+            transform-origin: 50% 50%;
+        }
+
+        /* Light Theme High Contrast Overrides */
+        html.light-theme body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        html.light-theme .glass-panel {
+            background: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+        }
+        html.light-theme .glass-header {
+            background: rgba(255, 255, 255, 0.98) !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+        html.light-theme .text-white {
+            color: #0f172a !important;
+        }
+        html.light-theme .text-slate-400 {
+            color: #475569 !important;
+        }
+        html.light-theme .text-slate-300 {
+            color: #334155 !important;
+        }
+        html.light-theme .bg-slate-900\/90,
+        html.light-theme .bg-slate-900\/95,
+        html.light-theme .bg-slate-900,
+        html.light-theme .bg-slate-950 {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+        }
+        html.light-theme .border-slate-800,
+        html.light-theme .border-slate-700 {
+            border-color: #cbd5e1 !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-white"
+      x-data="medibotApp()" x-init="initApp()">
+
+    <!-- Top Global Sticky Header -->
+    <header class="sticky top-0 z-50 glass-header px-4 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+        <!-- Logo & Platform Identity -->
+        <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 via-indigo-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
+                <i data-lucide="cross" class="w-6 h-6 text-white animate-pulse"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
+                        MEDIBOT OS
+                        <span class="text-[11px] uppercase px-2.5 py-0.5 rounded-full font-bold tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/25">
+                            Enterprise Backend v3.0
+                        </span>
+                    </h1>
+                </div>
+                <p class="text-xs text-slate-400 font-medium">Hospital Autonomous Intra-Logistics • 50 Patient Beds • 5-Floor Mesh</p>
+            </div>
+        </div>
+
+        <!-- Telemetry Status Pills -->
+        <div class="hidden xl:flex items-center gap-2.5 text-xs">
+            <!-- MongoDB Database Pill -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                <span class="w-2 h-2 rounded-full" :class="stats.db_online ? 'bg-emerald-400 pulse-emerald' : 'bg-cyan-400 pulse-cyan'"></span>
+                <span class="text-slate-400 font-medium">Database:</span>
+                <span class="font-semibold text-emerald-400" x-text="stats.db_online ? `MongoDB (${stats.ping_ms || 0.4}ms)` : 'InMemory Engine'"></span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 code-font" x-text="`${stats.total_live_documents || 0} Docs`"></span>
+            </div>
+
+            <!-- 100Hz TF-Luna LiDAR Pill -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 pulse-cyan"></span>
+                <span class="text-slate-400 font-medium">TF-Luna LiDAR:</span>
+                <span class="font-semibold text-cyan-300" x-text="telemetry.obstacle_detected ? 'OBSTACLE <40cm' : '100Hz ONLINE'"></span>
+            </div>
+
+            <!-- SG90 Deadbolt Pill -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                <span class="w-2 h-2 rounded-full" :class="telemetry.hatch_locked ? 'bg-emerald-400' : 'bg-amber-400'"></span>
+                <span class="text-slate-400 font-medium">SG90 Deadbolt:</span>
+                <span class="font-semibold" :class="telemetry.hatch_locked ? 'text-emerald-400' : 'text-amber-400'" x-text="telemetry.hatch_locked ? '0° LOCKED' : '90° UNLOCKED'"></span>
+            </div>
+
+            <!-- 5-Floor Elevator Relay Pill -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-400"></i>
+                <span class="text-slate-400 font-medium">Elevator:</span>
+                <span class="font-semibold text-indigo-300" x-text="`Floor ${telemetry.current_floor || 2} Linked`"></span>
+            </div>
+
+            <!-- Server Time -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span class="code-font text-[11px]" x-text="currentTime"></span>
+            </div>
+        </div>
+
+        <!-- Quick Launch Actions -->
+        <div class="flex items-center gap-2">
+            <!-- ERP Theme Toggle Button -->
+            <button @click="toggleTheme()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 border border-slate-700/60 transition flex items-center gap-1.5 text-xs font-medium" :title="theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+                <i :data-lucide="theme === 'dark' ? 'sun' : 'moon'" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span class="hidden md:inline text-[11px]" x-text="theme === 'dark' ? 'Light' : 'Dark'"></span>
+            </button>
+
+            <!-- ERP Home / Signout Reset Button -->
+            <button @click="switchTab('overview')" class="px-3 py-1.5 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 hover:text-rose-200 border border-rose-500/30 rounded-lg text-xs font-medium flex items-center gap-1.5 transition" title="Reset to Home Mission Control">
+                <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline">Signout / Home</span>
+            </button>
+
+            <button @click="refreshData()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 border border-slate-700/60 transition flex items-center gap-1.5 text-xs font-medium" title="Refresh Live Database Telemetry">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5" :class="loading ? 'animate-spin' : ''"></i>
+                <span class="hidden sm:inline">Sync</span>
+            </button>
+
+            <button @click="triggerSeed()" class="px-3 py-1.5 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 hover:text-cyan-200 border border-cyan-500/30 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
+                <i data-lucide="database-zap" class="w-3.5 h-3.5"></i>
+                <span>Re-Seed DB</span>
+            </button>
+
+            <a href="http://localhost:8081" target="_blank" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 hover:text-emerald-200 border border-emerald-500/30 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
+                <i data-lucide="tablet" class="w-3.5 h-3.5"></i>
+                <span>Mobile Console (:8081)</span>
+            </a>
+
+            <a href="/admin/" target="_blank" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span class="hidden sm:inline">Admin</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Navigation Tab Bar -->
+    <div class="bg-slate-900/95 border-b border-slate-800 px-4 lg:px-8 py-2.5 sticky top-[68px] z-40">
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-thin">
+            <button @click="switchTab('overview')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'overview' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="activity" class="w-4 h-4"></i>
+                <span>Mission Control & Telemetry</span>
+            </button>
+
+            <button @click="switchTab('explorer')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap relative"
+                    :class="activeTab === 'explorer' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="table" class="w-4 h-4 text-emerald-400"></i>
+                <span>Live Database Explorer</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" x-text="stats.total_live_documents || 0"></span>
+            </button>
+
+            <button @click="switchTab('backup')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'backup' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="database" class="w-4 h-4 text-cyan-400"></i>
+                <span>Database & Backup Center</span>
+            </button>
+
+            <button @click="switchTab('api')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'api' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="terminal" class="w-4 h-4 text-amber-400"></i>
+                <span>Interactive REST API Runner</span>
+            </button>
+
+            <button @click="switchTab('hardware')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'hardware' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i>
+                <span>Hardware & Autonomous Diagnostics</span>
+            </button>
+
+            <button @click="switchTab('docs')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'docs' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span>Architecture & Schema Docs</span>
+            </button>
+
+            <button @click="switchTab('proposals')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'proposals' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="clipboard-list" class="w-4 h-4 text-emerald-400"></i>
+                <span>Chemist Proposals & Dispensary</span>
+            </button>
+
+            <button @click="switchTab('beds_iot')" 
+                    class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap"
+                    :class="activeTab === 'beds_iot' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-amber-400"></i>
+                <span>50 Beds & Lift IoT Monitor</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div x-show="toast.show" x-transition 
+         class="fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-xl shadow-2xl border flex items-start gap-3"
+         :class="toast.type === 'success' ? 'bg-emerald-950/95 border-emerald-500/40 text-emerald-100' : (toast.type === 'error' ? 'bg-rose-950/95 border-rose-500/40 text-rose-100' : 'bg-slate-900/95 border-cyan-500/40 text-cyan-100')">
+        <div class="mt-0.5">
+            <i :data-lucide="toast.type === 'success' ? 'check-circle-2' : (toast.type === 'error' ? 'alert-octagon' : 'info')" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1">
+            <h4 class="text-sm font-semibold" x-text="toast.title"></h4>
+            <p class="text-xs text-slate-300 mt-0.5" x-text="toast.message"></p>
+        </div>
+        <button @click="toast.show = false" class="text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="flex-1 px-4 lg:px-8 py-6 max-w-7xl mx-auto w-full">
+
+        <!-- ==================================================================== -->
+        <!-- TAB 1: MISSION CONTROL & SYSTEM TELEMETRY                            -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'overview'" x-transition class="space-y-6">
+            <!-- 6 KPI Metric Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                <!-- KPI 1: Total SKUs -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between border-l-4 border-cyan-500">
+                    <div class="flex items-center justify-between text-slate-400 text-xs">
+                        <span>Formulary SKUs</span>
+                        <i data-lucide="pill" class="w-4 h-4 text-cyan-400"></i>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-2xl font-bold text-white" x-text="stats.collections?.inventory?.count || 160"></div>
+                        <p class="text-[11px] text-cyan-400 mt-0.5">Dispensary Formulary</p>
+                    </div>
+                </div>
+
+                <!-- KPI 2: Patient Beds -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between border-l-4 border-emerald-500">
+                    <div class="flex items-center justify-between text-slate-400 text-xs">
+                        <span>Hospital Beds</span>
+                        <i data-lucide="bed" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-2xl font-bold text-white">50 Beds</div>
+                        <p class="text-[11px] text-emerald-400 mt-0.5">Floor 1 to Floor 5 (Bed 12 Active)</p>
+                    </div>
+                </div>
+
+                <!-- KPI 3: Active Delivery Missions -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between border-l-4 border-indigo-500">
+                    <div class="flex items-center justify-between text-slate-400 text-xs">
+                        <span>Autonomous Rover</span>
+                        <i data-lucide="bot" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-2xl font-bold text-white" x-text="telemetry.hatch_status || 'ROVER READY'"></div>
+                        <p class="text-[11px] text-indigo-300 mt-0.5">Battery: <span x-text="telemetry.battery_percent || '88%'"></span></p>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Doctor Drug Requests -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between border-l-4 border-amber-500">
+                    <div class="flex items-center justify-between text-slate-400 text-xs">
+                        <span>Doctor Proposals</span>
+                        <i data-lucide="clipboard-list" class="w-4 h-4 text-amber-400"></i>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-2xl font-bold text-white" x-text="stats.collections?.drug_requests?.count || 1"></div>
+                        <p class="text-[11px] text-amber-400 mt-0.5">Chemist Approval Queue</p>
+                    </div>
+                </div>
+
+                <!-- KPI 5: Total DB Records -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between border-l-4 border-rose-500">
+                    <div class="flex items-center justify-between text-slate-400 text-xs">
+                        <span>Database Docs</span>
+                        <i data-lucide="database" class="w-4 h-4 text-rose-400"></i>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-2xl font-bold text-white" x-text="stats.total_live_documents || 0"></div>
+                        <p class="text-[11px] text-rose-400 mt-0.5">7 Unified Collections</p>
+                    </div>
+                </div>
+
+                <!-- KPI 6: LiDAR Sampling Rate -->
+                <div class="glass-panel p-4 rounded-xl flex flex-col justify-between border-l-4 border-teal-500">
+                    <div class="flex items-center justify-between text-slate-400 text-xs">
+                        <span>TF-Luna LiDAR</span>
+                        <i data-lucide="radar" class="w-4 h-4 text-teal-400"></i>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-2xl font-bold text-white">100 Hz</div>
+                        <p class="text-[11px] text-teal-400 mt-0.5">UART Baud 115200</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rover Live Hardware State & 50-Bed Matrix -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left: Rover Telemetry Detailed Card -->
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                                <i data-lucide="navigation" class="w-4 h-4"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-sm">Autonomous Rover Diagnostics</h3>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            ONLINE
+                        </span>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-400">Rover ID:</span>
+                            <span class="code-font font-semibold text-white">medibot_rover_01</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-400">Current Location:</span>
+                            <span class="font-semibold text-cyan-300" x-text="`Floor ${telemetry.current_floor || 2} - Corridor B (Heading ${telemetry.heading_deg || 45}°)`"></span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-400">LiDAR Proximity:</span>
+                            <span class="font-semibold" :class="telemetry.obstacle_detected ? 'text-rose-400' : 'text-emerald-400'"
+                                  x-text="`${telemetry.lidar_distance_cm || 185} cm (${telemetry.navigation_state || 'PATH_CLEAR'})`"></span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-400">SG90 Deadbolt Servo:</span>
+                            <span class="font-semibold" :class="telemetry.hatch_locked ? 'text-emerald-400' : 'text-amber-400'"
+                                  x-text="`${telemetry.servo_angle_deg || 0}° (${telemetry.hatch_status || 'DEADBOLT_LOCKED'})`"></span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                            <span class="text-slate-400">Battery (LiFePO4):</span>
+                            <div class="flex items-center gap-2">
+                                <div class="w-24 bg-slate-800 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-2 rounded-full" style="width: 88%"></div>
+                                </div>
+                                <span class="font-semibold text-white">88%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Buttons for Testing Hardware -->
+                    <div class="pt-2 flex items-center gap-2">
+                        <button @click="toggleDeadbolt()" class="flex-1 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 flex items-center justify-center gap-1.5 transition">
+                            <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i>
+                            <span x-text="telemetry.hatch_locked ? 'Unlock Hatch (90°)' : 'Lock Hatch (0°)'"></span>
+                        </button>
+                        <button @click="switchTab('hardware')" class="px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 transition">
+                            Diagnostics →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: 50-Bed Hospital Ward Visual Matrix -->
+                <div class="glass-panel p-6 rounded-2xl lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-4 h-4 text-cyan-400"></i>
+                                50-Bed Hospital Ward Matrix (Floors 1 to 5)
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-0.5">Live bed allocation. Bed 12 has active Coronary Stent inpatient isolation.</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="flex items-center gap-1 text-emerald-400 font-medium">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Bed 12 (Active)
+                            </span>
+                            <span class="flex items-center gap-1 text-slate-400 font-medium">
+                                <span class="w-2 h-2 rounded-full bg-slate-600"></span> Admitted (1-50)
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 5-Floor Grid -->
+                    <div class="space-y-2.5">
+                        <template x-for="floor in [5, 4, 3, 2, 1]" :key="floor">
+                            <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center gap-3">
+                                <div class="w-16 flex-shrink-0 text-xs font-semibold text-slate-300 flex items-center gap-1">
+                                    <span class="text-cyan-400">F<span x-text="floor"></span>:</span>
+                                    <span class="text-[10px] text-slate-500" x-text="`Beds ${(floor-1)*10+1}-${floor*10}`"></span>
+                                </div>
+                                <div class="flex-1 grid grid-cols-10 gap-1.5">
+                                    <template x-for="b in 10" :key="b">
+                                        <div class="py-1 px-1 rounded text-center text-[10px] font-bold transition cursor-pointer"
+                                             :class="((floor-1)*10 + b) === 12 ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/40 ring-2 ring-emerald-400' : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'"
+                                             :title="`Bed ${(floor-1)*10 + b} (Floor ${floor})`"
+                                             @click="inspectBed((floor-1)*10 + b)">
+                                            B<span x-text="((floor-1)*10 + b) < 10 ? '0' + ((floor-1)*10 + b) : ((floor-1)*10 + b)"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Workflow Actions Matrix -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-panel p-4 rounded-xl space-y-2 hover:border-cyan-500/40 transition">
+                    <div class="flex items-center gap-2 text-cyan-400">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">Doctor Order</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Doctor submits drug prescription proposal or special SKU order.</p>
+                    <button @click="switchTab('api')" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                        Test Endpoint →
+                    </button>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl space-y-2 hover:border-emerald-500/40 transition">
+                    <div class="flex items-center gap-2 text-emerald-400">
+                        <i data-lucide="package-check" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">Chemist Restock</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Chemist reviews proposals and restocks 160+ formulary SKUs.</p>
+                    <button @click="switchTab('explorer'); selectCollection('inventory')" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                        View Inventory →
+                    </button>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl space-y-2 hover:border-indigo-500/40 transition">
+                    <div class="flex items-center gap-2 text-indigo-400">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">Rover Mission</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Autonomous delivery dispatch with encrypted OTP deadbolt.</p>
+                    <button @click="switchTab('explorer'); selectCollection('delivery_orders')" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                        Track Deliveries →
+                    </button>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl space-y-2 hover:border-amber-500/40 transition">
+                    <div class="flex items-center gap-2 text-amber-400">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">Patient Invoicing</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Itemized billing records and pharmacy charges per bed.</p>
+                    <button @click="switchTab('explorer'); selectCollection('billing_invoices')" class="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                        Inspect Invoices →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 2: DATABASE & BACKUP CENTER                                      -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'backup'" x-transition class="space-y-6">
+            <!-- Backup Center Header & Quick Toolbar -->
+            <div class="glass-panel p-6 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                        <i data-lucide="database" class="w-5 h-5 text-cyan-400"></i>
+                        Hospital Database & Snapshot Operations
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Manage live database synchronization, create on-disk JSON backups, download full zip archives, or reset with fresh hospital seeds.
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button @click="triggerExport()" class="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-600/30 flex items-center gap-2 transition">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Export Collections to Disk</span>
+                    </button>
+
+                    <a href="/api/erp/portal/download/" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Download ZIP Archive</span>
+                    </a>
+
+                    <button @click="triggerSeed()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-2 transition">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4 text-amber-400"></i>
+                        <span>Re-Seed Database</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collections Inventory Table -->
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                    <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                        Hospital Database Collections (7 Entities)
+                    </h3>
+                    <span class="text-xs text-slate-400" x-text="`Total Live Documents: ${stats.total_live_documents || 0}`"></span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-800">
+                            <tr>
+                                <th class="px-6 py-3">Collection Name</th>
+                                <th class="px-6 py-3">Category</th>
+                                <th class="px-6 py-3">Live Documents</th>
+                                <th class="px-6 py-3">Backup Status</th>
+                                <th class="px-6 py-3">File Size</th>
+                                <th class="px-6 py-3">Sample Fields</th>
+                                <th class="px-6 py-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 font-medium">
+                            <template x-for="(colInfo, colName) in stats.collections" :key="colName">
+                                <tr class="hover:bg-slate-800/30 transition">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                                                <i data-lucide="folder" class="w-3.5 h-3.5"></i>
+                                            </div>
+                                            <div>
+                                                <span class="font-bold text-white code-font text-xs" x-text="colName"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-0.5 rounded text-[10px] uppercase font-semibold bg-slate-800 text-slate-300"
+                                              x-text="colName === 'inventory' ? 'Pharmacy' : (colName === 'users' ? 'Staff & Beds' : (colName === 'delivery_orders' ? 'Robotics' : 'Clinical'))"></span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="font-bold text-white text-sm" x-text="colInfo.count"></span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold"
+                                              :class="colInfo.has_backup ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'">
+                                            <span class="w-1.5 h-1.5 rounded-full" :class="colInfo.has_backup ? 'bg-emerald-400' : 'bg-amber-400'"></span>
+                                            <span x-text="colInfo.has_backup ? 'Exported' : 'Pending Export'"></span>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-slate-400 code-font" x-text="`${colInfo.backup_size_kb || 0} KB`"></td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-wrap gap-1 max-w-xs">
+                                            <template x-for="f in (colInfo.sample_fields || [])" :key="f">
+                                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400 code-font" x-text="f"></span>
+                                            </template>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button @click="switchTab('explorer'); selectCollection(colName)" class="px-3 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 text-xs font-medium transition">
+                                            Explore Docs →
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Snapshots Log -->
+            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <i data-lucide="archive" class="w-4 h-4 text-indigo-400"></i>
+                    Timestamped Snapshot History
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <template x-for="snap in (stats.snapshots || [])" :key="snap.name">
+                        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs">
+                            <div>
+                                <div class="font-bold text-white code-font" x-text="snap.name"></div>
+                                <div class="text-[11px] text-slate-400 mt-0.5" x-text="`Created: ${snap.created} • ${snap.file_count} files`"></div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300">
+                                Verified
+                            </span>
+                        </div>
+                    </template>
+                    <div x-show="!stats.snapshots || stats.snapshots.length === 0" class="text-xs text-slate-500 col-span-full py-4 text-center">
+                        No snapshots created yet. Click "Export Collections to Disk" to generate one.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 3: LIVE DATABASE EXPLORER                                        -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'explorer'" x-transition class="space-y-6">
+            <!-- Collection Selector Buttons -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                <template x-for="col in collections" :key="col">
+                    <button @click="selectCollection(col)" 
+                            class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 whitespace-nowrap"
+                            :class="activeCollection === col ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30' : 'bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800'">
+                        <span class="code-font" x-text="col"></span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]"
+                              :class="activeCollection === col ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'"
+                              x-text="stats.collections?.[col]?.count || 0"></span>
+                    </button>
+                </template>
+            </div>
+
+            <!-- Controls: Search & Pagination Bar -->
+            <div class="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                <!-- Search Box -->
+                <div class="relative flex-1 min-w-[240px]">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" 
+                           x-model="searchQuery" 
+                           @input.debounce.300ms="fetchCollectionData()"
+                           placeholder="Search across all records by name, ID, category, status..." 
+                           class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
+                </div>
+
+                <!-- Pagination & Status -->
+                <div class="flex items-center gap-3 text-xs">
+                    <span class="text-slate-400" x-text="`Showing ${collectionData.records?.length || 0} of ${collectionData.total || 0} records`"></span>
+
+                    <div class="flex items-center gap-1">
+                        <button @click="prevPage()" :disabled="pageSkip === 0" 
+                                class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-800 transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <span class="px-3 py-1 rounded-lg bg-slate-900 text-white code-font text-xs" x-text="`Page ${Math.floor(pageSkip / pageLimit) + 1}`"></span>
+                        <button @click="nextPage()" :disabled="pageSkip + pageLimit >= collectionData.total"
+                                class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-800 transition">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <!-- Dynamic Table for INVENTORY -->
+                    <template x-if="activeCollection === 'inventory'">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-800">
+                                <tr>
+                                    <th class="px-6 py-3">SKU ID</th>
+                                    <th class="px-6 py-3">Drug Name</th>
+                                    <th class="px-6 py-3">Category</th>
+                                    <th class="px-6 py-3">Stock Level</th>
+                                    <th class="px-6 py-3">Dosage / Form</th>
+                                    <th class="px-6 py-3">Rack</th>
+                                    <th class="px-6 py-3 text-right">Inspect</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/60 font-medium">
+                                <template x-for="item in collectionData.records" :key="item.id || item.drug_id">
+                                    <tr class="hover:bg-slate-800/30 transition">
+                                        <td class="px-6 py-3.5 code-font font-bold text-cyan-400" x-text="item.id || item.drug_id"></td>
+                                        <td class="px-6 py-3.5 font-bold text-white" x-text="item.name || item.drug_name"></td>
+                                        <td class="px-6 py-3.5">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20" x-text="item.category"></span>
+                                        </td>
+                                        <td class="px-6 py-3.5">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-16 bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                                    <div class="h-1.5 rounded-full" 
+                                                         :class="(item.stock_level || item.quantity) < 15 ? 'bg-rose-500' : 'bg-emerald-400'"
+                                                         :style="`width: ${Math.min(100, (item.stock_level || item.quantity) * 2)}%`"></div>
+                                                </div>
+                                                <span class="font-bold" :class="(item.stock_level || item.quantity) < 15 ? 'text-rose-400' : 'text-emerald-400'" x-text="item.stock_level || item.quantity"></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-3.5 text-slate-300" x-text="item.dosage || item.unit"></td>
+                                        <td class="px-6 py-3.5 code-font text-slate-400" x-text="item.rack_location || 'Dispensary A1'"></td>
+                                        <td class="px-6 py-3.5 text-right">
+                                            <button @click="openDocModal(item)" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition" title="Inspect JSON">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+
+                    <!-- Dynamic Table for USERS (Staff & 50 Beds) -->
+                    <template x-if="activeCollection === 'users'">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-800">
+                                <tr>
+                                    <th class="px-6 py-3">User ID</th>
+                                    <th class="px-6 py-3">Full Name</th>
+                                    <th class="px-6 py-3">Role</th>
+                                    <th class="px-6 py-3">Bed Allocation</th>
+                                    <th class="px-6 py-3">Department / Ward</th>
+                                    <th class="px-6 py-3">Diagnosis / Shift</th>
+                                    <th class="px-6 py-3 text-right">Inspect</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/60 font-medium">
+                                <template x-for="user in collectionData.records" :key="user.id">
+                                    <tr class="hover:bg-slate-800/30 transition">
+                                        <td class="px-6 py-3.5 code-font font-bold text-indigo-400" x-text="user.id"></td>
+                                        <td class="px-6 py-3.5 font-bold text-white" x-text="user.name"></td>
+                                        <td class="px-6 py-3.5">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                                                  :class="user.role === 'DOCTOR' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : (user.role === 'CHEMIST' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : (user.role === 'PATIENT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'))"
+                                                  x-text="user.role"></span>
+                                        </td>
+                                        <td class="px-6 py-3.5">
+                                            <span x-show="user.assigned_bed" class="font-bold text-white" x-text="`Bed #${user.assigned_bed} (Floor ${user.allocated_floor || 1})`"></span>
+                                            <span x-show="!user.assigned_bed" class="text-slate-500">-</span>
+                                        </td>
+                                        <td class="px-6 py-3.5 text-slate-300" x-text="user.department || '-'"></td>
+                                        <td class="px-6 py-3.5 text-slate-400" x-text="user.diagnosis || user.duty_shift || '-'"></td>
+                                        <td class="px-6 py-3.5 text-right">
+                                            <button @click="openDocModal(user)" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition" title="Inspect JSON">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+
+                    <!-- Dynamic Table for DELIVERY ORDERS -->
+                    <template x-if="activeCollection === 'delivery_orders'">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-800">
+                                <tr>
+                                    <th class="px-6 py-3">Order ID</th>
+                                    <th class="px-6 py-3">Target Bed</th>
+                                    <th class="px-6 py-3">Medication</th>
+                                    <th class="px-6 py-3">Delivery Status</th>
+                                    <th class="px-6 py-3">Deadbolt OTP</th>
+                                    <th class="px-6 py-3">Timestamp</th>
+                                    <th class="px-6 py-3 text-right">Inspect</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/60 font-medium">
+                                <template x-for="order in collectionData.records" :key="order.id">
+                                    <tr class="hover:bg-slate-800/30 transition">
+                                        <td class="px-6 py-3.5 code-font font-bold text-cyan-400" x-text="order.id"></td>
+                                        <td class="px-6 py-3.5 font-bold text-white" x-text="`Bed #${order.bed_number} (Floor ${order.floor})`"></td>
+                                        <td class="px-6 py-3.5 text-slate-200" x-text="order.drug_name"></td>
+                                        <td class="px-6 py-3.5">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                                                  :class="order.status === 'DELIVERED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-cyan-500/20 text-cyan-300'"
+                                                  x-text="order.status"></span>
+                                        </td>
+                                        <td class="px-6 py-3.5 code-font font-bold text-amber-400" x-text="order.hatch_otp || 'VERIFIED'"></td>
+                                        <td class="px-6 py-3.5 text-slate-400 code-font text-[11px]" x-text="order.dispatched_at || order.created_at || '-'"></td>
+                                        <td class="px-6 py-3.5 text-right">
+                                            <button @click="openDocModal(order)" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition" title="Inspect JSON">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+
+                    <!-- Generic Table for other collections (drug_requests, prescriptions_orders, billing_invoices, robot_telemetry) -->
+                    <template x-if="!['inventory', 'users', 'delivery_orders'].includes(activeCollection)">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-800">
+                                <tr>
+                                    <th class="px-6 py-3">Document ID</th>
+                                    <th class="px-6 py-3">Key Attributes</th>
+                                    <th class="px-6 py-3">Status / Value</th>
+                                    <th class="px-6 py-3">Timestamp</th>
+                                    <th class="px-6 py-3 text-right">Inspect</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/60 font-medium">
+                                <template x-for="doc in collectionData.records" :key="doc.id || doc._id">
+                                    <tr class="hover:bg-slate-800/30 transition">
+                                        <td class="px-6 py-3.5 code-font font-bold text-cyan-400" x-text="doc.id || doc._id || 'REC'"></td>
+                                        <td class="px-6 py-3.5">
+                                            <div class="space-y-0.5">
+                                                <div class="font-bold text-white" x-text="doc.drug_name || doc.robot_id || doc.patient_name || doc.description || 'Record'"></div>
+                                                <div class="text-[11px] text-slate-400" x-text="doc.doctor_name || doc.department || doc.notes || ''"></div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-3.5">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-cyan-300"
+                                                  x-text="doc.status || doc.total_amount || doc.battery_percent || 'ACTIVE'"></span>
+                                        </td>
+                                        <td class="px-6 py-3.5 text-slate-400 code-font text-[11px]" x-text="doc.created_at || doc.timestamp || '-'"></td>
+                                        <td class="px-6 py-3.5 text-right">
+                                            <button @click="openDocModal(doc)" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition" title="Inspect JSON">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 4: INTERACTIVE REST API RUNNER                                   -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'api'" x-transition class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left: Endpoint Library -->
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                        <i data-lucide="terminal" class="w-4 h-4 text-amber-400"></i>
+                        Hospital ERP REST Endpoints
+                    </h3>
+                    <p class="text-xs text-slate-400">Click any endpoint to load its test payload into the interactive request executor.</p>
+
+                    <div class="space-y-2 max-h-[550px] overflow-y-auto pr-1">
+                        <template x-for="ep in apiEndpoints" :key="ep.url + ep.method">
+                            <div @click="loadEndpoint(ep)" 
+                                 class="p-3 rounded-xl border transition cursor-pointer"
+                                 :class="selectedEndpoint?.name === ep.name ? 'bg-cyan-950/40 border-cyan-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-xs font-bold text-white" x-text="ep.name"></span>
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold code-font"
+                                          :class="ep.method === 'GET' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-emerald-500/20 text-emerald-300'"
+                                          x-text="ep.method"></span>
+                                </div>
+                                <div class="code-font text-[11px] text-slate-400 mt-1 truncate" x-text="ep.url"></div>
+                                <div class="text-[11px] text-slate-500 mt-0.5" x-text="ep.desc"></div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Right: Request & Response Playground -->
+                <div class="glass-panel p-6 rounded-2xl lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-white text-sm" x-text="selectedEndpoint ? selectedEndpoint.name : 'Select an Endpoint'"></h3>
+                            <p class="text-xs text-slate-400 mt-0.5" x-text="selectedEndpoint ? selectedEndpoint.desc : 'Click an endpoint from the left menu.'"></p>
+                        </div>
+                        <button @click="executeApiCall()" :disabled="apiLoading || !selectedEndpoint"
+                                class="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white shadow-lg shadow-cyan-600/30 flex items-center gap-2 transition disabled:opacity-40">
+                            <i data-lucide="play" class="w-4 h-4" :class="apiLoading ? 'animate-spin' : ''"></i>
+                            <span x-text="apiLoading ? 'Executing...' : 'Send Request'"></span>
+                        </button>
+                    </div>
+
+                    <!-- URL & Method Bar -->
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-2 rounded-xl text-xs font-bold code-font bg-slate-900 border border-slate-800"
+                              :class="selectedEndpoint?.method === 'GET' ? 'text-cyan-400' : 'text-emerald-400'"
+                              x-text="selectedEndpoint ? selectedEndpoint.method : 'GET'"></span>
+                        <input type="text" x-model="apiFormUrl" class="flex-1 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white code-font focus:outline-none focus:border-cyan-500">
+                    </div>
+
+                    <!-- Request Body (JSON) -->
+                    <div x-show="selectedEndpoint?.method === 'POST'" class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-400">Request Body (JSON):</label>
+                        <textarea x-model="apiFormBody" rows="5" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-emerald-300 code-font focus:outline-none focus:border-cyan-500"></textarea>
+                    </div>
+
+                    <!-- Response Output Container -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">Live Response:</span>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span x-show="apiStatusCode" class="px-2 py-0.5 rounded text-[10px] font-bold"
+                                      :class="apiStatusCode < 300 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'"
+                                      x-text="`Status: ${apiStatusCode}`"></span>
+                                <span x-show="apiLatency" class="text-slate-400 code-font text-[11px]" x-text="`${apiLatency}ms`"></span>
+                            </div>
+                        </div>
+                        <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800/90 text-xs text-cyan-300 code-font overflow-x-auto max-h-[360px]"
+                             x-text="apiResponseOutput || '// Click Send Request to execute the API call'"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 5: HARDWARE & AUTONOMOUS DIAGNOSTICS                             -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'hardware'" x-transition class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Radar / LiDAR Simulation -->
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i data-lucide="radar" class="w-4 h-4 text-cyan-400"></i>
+                            TF-Luna LiDAR Radar (100Hz)
+                        </h3>
+                        <span class="text-xs text-slate-400">UART 115200</span>
+                    </div>
+
+                    <!-- Radar Canvas Graphic -->
+                    <div class="relative w-48 h-48 mx-auto rounded-full border-2 border-cyan-500/30 bg-slate-950/80 flex items-center justify-center overflow-hidden">
+                        <!-- Concentric circles -->
+                        <div class="absolute w-36 h-36 rounded-full border border-cyan-500/20"></div>
+                        <div class="absolute w-24 h-24 rounded-full border border-cyan-500/20"></div>
+                        <div class="absolute w-12 h-12 rounded-full border border-cyan-500/20"></div>
+                        <!-- Radar Sweep Beam -->
+                        <div class="absolute inset-0 radar-beam bg-gradient-to-tr from-transparent via-cyan-500/15 to-transparent pointer-events-none"></div>
+                        <!-- Center Point -->
+                        <div class="w-3 h-3 rounded-full bg-cyan-400 z-10 pulse-cyan"></div>
+                    </div>
+
+                    <!-- Distance Slider -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Simulate Distance:</span>
+                            <span class="font-bold text-white code-font" x-text="`${simLidarDistance} cm`"></span>
+                        </div>
+                        <input type="range" min="15" max="250" x-model="simLidarDistance" @input="actuateLidar()"
+                               class="w-full accent-cyan-500 bg-slate-800 rounded-lg">
+                        <div class="p-2.5 rounded-lg text-xs" :class="simLidarDistance < 40 ? 'bg-rose-950/60 border border-rose-500/40 text-rose-200' : 'bg-slate-900 text-slate-300'">
+                            <span class="font-bold" x-text="simLidarDistance < 40 ? 'WARNING: Obstacle <40cm - Emergency Stop' : 'Clearance Adequate - Navigation Safe'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SG90 Deadbolt Hatch Controller -->
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
+                            SG90 Deadbolt Hatch Actuator
+                        </h3>
+                        <span class="text-xs text-slate-400">PWM 50Hz</span>
+                    </div>
+
+                    <!-- Hatch Diagram -->
+                    <div class="p-6 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-3">
+                        <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center transition-all duration-300"
+                             :class="telemetry.hatch_locked ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'">
+                            <i :data-lucide="telemetry.hatch_locked ? 'lock' : 'unlock'" class="w-8 h-8"></i>
+                        </div>
+                        <div class="font-bold text-white text-sm" x-text="telemetry.hatch_locked ? 'DEADBOLT SECURED (0°)' : 'HATCH UNLOCKED (90°)'"></div>
+                        <p class="text-xs text-slate-400">Only unlocks when Patient Bed OTP or Chemist Passcode is verified.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button @click="actuateDeadbolt(0)" class="py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition">
+                            Engage Deadbolt (0°)
+                        </button>
+                        <button @click="actuateDeadbolt(90)" class="py-2.5 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white transition">
+                            Unlock Hatch (90°)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5-Floor Optocoupler Elevator Controller -->
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-indigo-400"></i>
+                            5-Floor Elevator Optocoupler
+                        </h3>
+                        <span class="text-xs text-slate-400">GPIO Relay Array</span>
+                    </div>
+
+                    <p class="text-xs text-slate-400">Simulate autonomous elevator floor calling via optocoupler relay closure.</p>
+
+                    <div class="space-y-2">
+                        <template x-for="floor in [5, 4, 3, 2, 1]" :key="floor">
+                            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-xs">
+                                    <span class="w-2 h-2 rounded-full" :class="telemetry.current_floor === floor ? 'bg-indigo-400 pulse-cyan' : 'bg-slate-700'"></span>
+                                    <span class="font-bold text-white" x-text="`Floor ${floor} Relay`"></span>
+                                </div>
+                                <button @click="dispatchElevator(floor)" 
+                                        class="px-3 py-1 rounded-lg text-xs font-semibold transition"
+                                        :class="telemetry.current_floor === floor ? 'bg-indigo-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'">
+                                    <span x-text="telemetry.current_floor === floor ? 'Active Floor' : 'Dispatch Rover'"></span>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 6: ARCHITECTURE & SCHEMA DOCS                                    -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'docs'" x-transition class="space-y-6">
+            <div class="glass-panel p-8 rounded-2xl space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                        <i data-lucide="shield" class="w-5 h-5 text-cyan-400"></i>
+                        Hospital Security & Role Isolation Specification
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Complete isolation matrix governing Patient Bed 12, Doctors, Chemists, Nurses, and Administrators.
+                    </p>
+                </div>
+
+                <!-- Isolation Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-800">
+                            <tr>
+                                <th class="px-4 py-3">Role Persona</th>
+                                <th class="px-4 py-3">Inventory Access</th>
+                                <th class="px-4 py-3">Drug Suggestions</th>
+                                <th class="px-4 py-3">Order Medication</th>
+                                <th class="px-4 py-3">Rover Dispatch</th>
+                                <th class="px-4 py-3">Hatch Unlock</th>
+                                <th class="px-4 py-3">Bed Invoices</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 font-medium">
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="px-4 py-3 font-bold text-amber-400">PATIENT (Bed 12)</td>
+                                <td class="px-4 py-3 text-rose-400">STRICT BLOCKED</td>
+                                <td class="px-4 py-3 text-rose-400">BLOCKED</td>
+                                <td class="px-4 py-3 text-rose-400">BLOCKED</td>
+                                <td class="px-4 py-3 text-rose-400">BLOCKED</td>
+                                <td class="px-4 py-3 text-emerald-400">OTP Only (Bed 12)</td>
+                                <td class="px-4 py-3 text-emerald-400">Bed 12 Bill Only</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="px-4 py-3 font-bold text-cyan-400">DOCTOR</td>
+                                <td class="px-4 py-3 text-slate-300">Read-Only Formulary</td>
+                                <td class="px-4 py-3 text-emerald-400">PROPOSE NEW DRUG</td>
+                                <td class="px-4 py-3 text-emerald-400">Prescribe Bed Meds</td>
+                                <td class="px-4 py-3 text-rose-400">Chemist Gated</td>
+                                <td class="px-4 py-3 text-slate-400">Read Telemetry</td>
+                                <td class="px-4 py-3 text-slate-300">View Invoices</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="px-4 py-3 font-bold text-emerald-400">CHEMIST</td>
+                                <td class="px-4 py-3 text-emerald-400">FULL RESTOCK & ADD</td>
+                                <td class="px-4 py-3 text-emerald-400">APPROVE / DECLINE</td>
+                                <td class="px-4 py-3 text-slate-300">Dispense & Queue</td>
+                                <td class="px-4 py-3 text-emerald-400">DISPATCH ROVER</td>
+                                <td class="px-4 py-3 text-emerald-400">Chemist Bypass</td>
+                                <td class="px-4 py-3 text-emerald-400">Manage Invoices</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="px-4 py-3 font-bold text-purple-400">ADMIN / BIOMED</td>
+                                <td class="px-4 py-3 text-emerald-400">FULL ACCESS</td>
+                                <td class="px-4 py-3 text-emerald-400">FULL ACCESS</td>
+                                <td class="px-4 py-3 text-emerald-400">FULL ACCESS</td>
+                                <td class="px-4 py-3 text-emerald-400">OVERRIDE DISPATCH</td>
+                                <td class="px-4 py-3 text-emerald-400">OVERRIDE DEADBOLT</td>
+                                <td class="px-4 py-3 text-emerald-400">AUDIT ALL</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 7: CHEMIST DRUG PROPOSALS & DISPENSARY                           -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'proposals'" x-transition class="space-y-6">
+            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                            <i data-lucide="clipboard-list" class="w-5 h-5 text-emerald-400"></i>
+                            Chemist Drug Proposals Queue & Prescription Ordering
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Review real-time incoming physician & nurse medication proposals, approve into hospital catalog, and order for MEDIBOT bedside delivery.
+                        </p>
+                    </div>
+                    <button @click="fetchProposals()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                        <span>Refresh Proposals</span>
+                    </button>
+                </div>
+
+                <!-- Proposals List -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <template x-if="proposalsList.length === 0">
+                        <div class="col-span-2 p-8 text-center bg-slate-900/50 rounded-xl border border-slate-800">
+                            <i data-lucide="check-circle" class="w-8 h-8 text-emerald-400 mx-auto mb-2"></i>
+                            <p class="text-sm font-semibold text-white">All Physician Proposals Handled</p>
+                            <p class="text-xs text-slate-400 mt-1">No pending medication proposals awaiting Chemist approval.</p>
+                        </div>
+                    </template>
+
+                    <template x-for="prop in proposalsList" :key="prop.id || prop.proposal_id || prop.request_id">
+                        <div class="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full" :class="prop.status === 'APPROVED' ? 'bg-emerald-400' : (prop.status === 'REJECTED' ? 'bg-rose-400' : 'bg-amber-400')"></span>
+                                    <span class="text-sm font-bold text-white" x-text="prop.drug_name"></span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider"
+                                      :class="prop.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : (prop.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30')"
+                                      x-text="prop.status"></span>
+                            </div>
+
+                            <p class="text-xs text-cyan-300 font-semibold" x-text="`Dosage: ${prop.recommended_dosage || 'Standard'} • Category: ${prop.category || 'CRITICAL_CARE'}`"></p>
+                            <p class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80" x-text="`Justification: ${prop.justification || prop.notes || 'Emergency clinical request'}`"></p>
+
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                                <span x-text="`Doctor: ${prop.requested_by || prop.doctor_name || 'Dr. Anita Mehta, MD'}`"></span>
+                                <span x-text="`Target: Bed #${prop.target_bed || 12} (Floor ${prop.target_floor || 2})`"></span>
+                            </div>
+
+                            <div class="flex items-center gap-2 pt-2" x-show="prop.status === 'PENDING' || prop.status === 'PENDING_CHEMIST'">
+                                <button @click="approveProposal(prop.id || prop.proposal_id || prop.request_id)"
+                                        class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5">
+                                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                    <span>Approve & Catalog</span>
+                                </button>
+                                <button @click="rejectProposal(prop.id || prop.proposal_id || prop.request_id)"
+                                        class="px-3 py-1.5 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5">
+                                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                                    <span>Decline</span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 8: 50 BEDS WARD GRID & LIFT IOT TELEMETRY                         -->
+        <!-- ==================================================================== -->
+        <div x-show="activeTab === 'beds_iot'" x-transition class="space-y-6">
+            <!-- 50 Beds Grid -->
+            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                            <i data-lucide="layout-grid" class="w-5 h-5 text-amber-400"></i>
+                            50-Bed Hospital Ward Mesh
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Real-time hospital bed allocation across 5 floors. Bed 12 isolated for high-security patient terminal.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-semibold">
+                            Bed 12 Isolated
+                        </span>
+                        <span class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-semibold">
+                            36 Occupied / 14 Vacant
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-5 sm:grid-cols-10 gap-2 pt-2">
+                    <template x-for="i in 50" :key="i">
+                        <div class="p-2.5 rounded-lg border text-center transition cursor-pointer"
+                             :class="i === 12 ? 'bg-amber-500/20 border-amber-500/60 shadow-lg shadow-amber-500/20' : (i <= 36 ? 'bg-slate-900 border-slate-700/80 hover:border-slate-500' : 'bg-slate-950/40 border-dashed border-slate-800 text-slate-600')">
+                            <div class="text-[10px] uppercase font-bold text-slate-400" x-text="`F${Math.ceil(i / 10)}`"></div>
+                            <div class="text-sm font-extrabold" :class="i === 12 ? 'text-amber-300' : (i <= 36 ? 'text-white' : 'text-slate-600')" x-text="`#${i}`"></div>
+                            <div class="text-[9px] mt-1 font-semibold" :class="i === 12 ? 'text-amber-400' : (i <= 36 ? 'text-emerald-400' : 'text-slate-600')" x-text="i === 12 ? 'PATIENT' : (i <= 36 ? 'OCCUPIED' : 'VACANT')"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Lift IoT 5-Floor Relay Monitor -->
+            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                            <i data-lucide="layers" class="w-5 h-5 text-indigo-400"></i>
+                            5-Floor Elevator Optocoupler Relay & Cabin State
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Real-time hardware handshake with multi-floor elevator controller via ESP32 optocouplers.
+                        </p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 text-xs font-semibold code-font">
+                        Relay Floor: <span x-text="telemetry.current_floor || 2"></span> Active
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
+                    <template x-for="fl in [1, 2, 3, 4, 5]" :key="fl">
+                        <div class="p-4 rounded-xl border flex flex-col items-center justify-between text-center transition"
+                             :class="(telemetry.current_floor || 2) === fl ? 'bg-indigo-950/40 border-indigo-500/60 shadow-lg shadow-indigo-500/20' : 'bg-slate-900/60 border-slate-800'">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm"
+                                 :class="(telemetry.current_floor || 2) === fl ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'" x-text="`L${fl}`"></div>
+                            <div class="my-2">
+                                <div class="text-xs font-bold text-white" x-text="`Floor ${fl}`"></div>
+                                <div class="text-[10px] text-slate-400" x-text="fl === 1 ? 'Ground/ER' : (fl === 2 ? 'Cardiology' : (fl === 3 ? 'Surgery' : (fl === 4 ? 'Post-Op' : 'Suites')))"></div>
+                            </div>
+                            <button @click="actuateElevator(fl)"
+                                    class="w-full py-1 rounded text-[10px] font-bold uppercase transition"
+                                    :class="(telemetry.current_floor || 2) === fl ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40' : 'bg-slate-800 text-slate-400 hover:text-white'">
+                                Pulse Relay
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Document Raw JSON Modal -->
+    <div x-show="docModal.show" x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="file-json" class="w-4 h-4 text-cyan-400"></i>
+                    <h4 class="font-bold text-white text-sm">Document Raw JSON Inspector</h4>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button @click="copyDocJson()" class="px-3 py-1 rounded-lg bg-cyan-600/20 text-cyan-300 hover:bg-cyan-600/30 text-xs font-semibold transition">
+                        Copy JSON
+                    </button>
+                    <button @click="docModal.show = false" class="p-1 text-slate-400 hover:text-white rounded">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <pre class="code-font text-xs text-emerald-300 whitespace-pre-wrap" x-text="JSON.stringify(docModal.data, null, 2)"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alpine.js Application Logic -->
+    <script>
+        function medibotApp() {
+            return {
+                activeTab: 'overview',
+                theme: 'dark',
+                loading: false,
+                currentTime: '',
+                toggleTheme() {
+                    this.theme = this.theme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.classList.toggle('light-theme', this.theme === 'light');
+                    this.$nextTick(() => {
+                        if (window.lucide) window.lucide.createIcons();
+                    });
+                },
+                stats: {
+                    db_online: true,
+                    total_live_documents: 0,
+                    ping_ms: 0.4,
+                    collections: {},
+                    snapshots: []
+                },
+                telemetry: {
+                    hatch_locked: true,
+                    hatch_status: 'DEADBOLT_LOCKED',
+                    current_floor: 2,
+                    lidar_distance_cm: 185,
+                    obstacle_detected: false,
+                    battery_percent: '88%',
+                    servo_angle_deg: 0,
+                    heading_deg: 45
+                },
+                collections: ['inventory', 'users', 'delivery_orders', 'drug_requests', 'prescriptions_orders', 'billing_invoices', 'robot_telemetry'],
+                activeCollection: 'inventory',
+                collectionData: { records: [], total: 0 },
+                searchQuery: '',
+                pageLimit: 25,
+                pageSkip: 0,
+                simLidarDistance: 185,
+
+                // API Playground
+                selectedEndpoint: null,
+                apiFormUrl: '/api/health/',
+                apiFormBody: '{}',
+                apiLoading: false,
+                apiResponseOutput: '',
+                apiStatusCode: null,
+                apiLatency: null,
+                apiEndpoints: [
+                    { name: 'Core System Health', method: 'GET', url: '/api/health/', desc: '100Hz LiDAR, deadbolt & elevator telemetry status.', body: '' },
+                    { name: 'Doctor Login (Token)', method: 'POST', url: '/api/auth/login/', desc: 'Authenticate doctor persona for prescribing.', body: JSON.stringify({ email: 'doc@hospital.com', password: 'password123' }, null, 2) },
+                    { name: 'Chemist Login (Token)', method: 'POST', url: '/api/auth/login/', desc: 'Authenticate chemist for restocking & approving drugs.', body: JSON.stringify({ email: 'chemist@hospital.com', password: 'password123' }, null, 2) },
+                    { name: 'Patient Bed 12 Login', method: 'POST', url: '/api/auth/login/', desc: 'Authenticate Bed 12 inpatient for tracking & bills.', body: JSON.stringify({ email: 'bed12@hospital.com', password: 'password123' }, null, 2) },
+                    { name: 'Formulary Inventory', method: 'GET', url: '/api/erp/inventory/', desc: 'Query 160+ hospital drug SKUs catalogue.', body: '' },
+                    { name: 'Doctor Propose Drug', method: 'POST', url: '/api/doctor/request-new-drug/', desc: 'Doctor submits drug request for chemist approval.', body: JSON.stringify({ drug_name: 'Vasopressin 20 units/ml', category: 'CRITICAL_CARE', dosage: '20 units/ml Ampoule', doctor_name: 'Dr. Anita Mehta, MD', notes: 'Needed for post-op ICU bed 12' }, null, 2) },
+                    { name: 'Chemist Review Requests', method: 'GET', url: '/api/chemist/drug-requests/', desc: 'Chemist inspects pending doctor drug proposals.', body: '' },
+                    { name: 'Chemist Restock SKU', method: 'POST', url: '/api/erp/inventory/restock/', desc: 'Restock inventory SKU quantity (Chemist gated).', body: JSON.stringify({ drug_id: 'SKU_CC_01', quantity: 50, chemist_name: 'Rahul Verma (R.Ph)' }, null, 2) },
+                    { name: 'Create Delivery Order', method: 'POST', url: '/api/orders/create/', desc: 'Create medication delivery mission to Bed 12.', body: JSON.stringify({ bed_number: 12, floor: 2, drug_id: 'SKU_CC_01', drug_name: 'Atropine Sulfate 0.6mg/ml', patient_name: 'Ramesh Sharma' }, null, 2) },
+                    { name: 'Dispatch Robot Rover', method: 'POST', url: '/api/orders/ord_sample_01/dispatch/', desc: 'Chemist dispatches rover with encrypted OTP.', body: JSON.stringify({ chemist_id: 'usr_chm_01' }, null, 2) },
+                    { name: 'Verify Hatch Bed OTP', method: 'POST', url: '/api/orders/ord_sample_01/verify-hatch/', desc: 'Patient or Nurse enters 6-digit OTP to open hatch.', body: JSON.stringify({ otp: '482910' }, null, 2) },
+                    { name: 'Bed 12 Itemized Bill', method: 'GET', url: '/api/erp/billing/invoice/?bed=12', desc: 'Retrieve itemized hospital invoice for Bed 12.', body: '' }
+                ],
+
+                docModal: { show: false, data: {} },
+                toast: { show: false, title: '', message: '', type: 'success' },
+                proposalsList: [],
+
+                initApp() {
+                    this.updateTime();
+                    setInterval(() => this.updateTime(), 1000);
+                    this.refreshData();
+                    this.fetchProposals();
+                    this.selectCollection('inventory');
+                    if (this.apiEndpoints.length > 0) {
+                        this.loadEndpoint(this.apiEndpoints[0]);
+                    }
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                updateTime() {
+                    const now = new Date();
+                    this.currentTime = now.toLocaleTimeString('en-US', { hour12: false });
+                },
+
+                showToast(title, message, type = 'success') {
+                    this.toast = { show: true, title, message, type };
+                    setTimeout(() => { this.toast.show = false; }, 4000);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                switchTab(tab) {
+                    this.activeTab = tab;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                async refreshData() {
+                    this.loading = true;
+                    try {
+                        const res = await fetch('/api/erp/portal/stats/');
+                        if (res.ok) {
+                            this.stats = await res.json();
+                        }
+                        const rRes = await fetch('/api/robot/telemetry/');
+                        if (rRes.ok) {
+                            const rData = await rRes.json();
+                            this.telemetry = { ...this.telemetry, ...rData };
+                        }
+                    } catch (e) {
+                        console.error("Error syncing telemetry:", e);
+                    } finally {
+                        this.loading = false;
+                        this.$nextTick(() => lucide.createIcons());
+                    }
+                },
+
+                async fetchProposals() {
+                    try {
+                        const res = await fetch('/api/erp/proposals/');
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.proposalsList = Array.isArray(data) ? data : (data.results || []);
+                        } else {
+                            const r = await fetch('/api/chemist/drug-requests/');
+                            if (r.ok) {
+                                const d = await r.json();
+                                this.proposalsList = d.requests || [];
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error fetching proposals:', e);
+                    } finally {
+                        this.$nextTick(() => lucide.createIcons());
+                    }
+                },
+
+                async approveProposal(id) {
+                    try {
+                        const res = await fetch(`/api/erp/proposals/${id}/approve/`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ chemist_name: 'Rahul Verma (R.Ph)' })
+                        });
+                        if (res.ok) {
+                            this.showToast('Proposal Approved', 'Medication cataloged for hospital dispensing.');
+                            await this.fetchProposals();
+                            await this.refreshData();
+                        } else {
+                            const res2 = await fetch(`/api/chemist/drug-requests/${id}/action/`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'APPROVE', chemist_name: 'Rahul Verma (R.Ph)' })
+                            });
+                            if (res2.ok) {
+                                this.showToast('Proposal Approved', 'Medication cataloged for hospital dispensing.');
+                                await this.fetchProposals();
+                                await this.refreshData();
+                            }
+                        }
+                    } catch (e) {
+                        this.showToast('Action Error', e.message, 'error');
+                    }
+                },
+
+                async rejectProposal(id) {
+                    try {
+                        const res = await fetch(`/api/erp/proposals/${id}/reject/`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ chemist_name: 'Rahul Verma (R.Ph)', reason: 'Formulary alternative available' })
+                        });
+                        if (res.ok) {
+                            this.showToast('Proposal Declined', 'Request marked as rejected.');
+                            await this.fetchProposals();
+                        } else {
+                            const res2 = await fetch(`/api/chemist/drug-requests/${id}/action/`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'REJECT', chemist_name: 'Rahul Verma (R.Ph)', reason: 'Formulary alternative available' })
+                            });
+                            if (res2.ok) {
+                                this.showToast('Proposal Declined', 'Request marked as rejected.');
+                                await this.fetchProposals();
+                            }
+                        }
+                    } catch (e) {
+                        this.showToast('Action Error', e.message, 'error');
+                    }
+                },
+
+                async actuateElevator(floor) {
+                    try {
+                        const res = await fetch('/api/erp/lift-bridge/telemetry/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ target_floor: floor })
+                        });
+                        if (res.ok) {
+                            this.showToast('Elevator Interlocked', `Relay pulsed for Floor ${floor}. Cabin transitioning.`);
+                            await this.refreshData();
+                        }
+                    } catch (e) {
+                        this.showToast('Elevator Actuation Error', e.message, 'error');
+                    }
+                },
+
+                async selectCollection(colName) {
+                    this.activeCollection = colName;
+                    this.pageSkip = 0;
+                    await this.fetchCollectionData();
+                },
+
+                async fetchCollectionData() {
+                    try {
+                        const params = new URLSearchParams({
+                            limit: this.pageLimit,
+                            skip: this.pageSkip,
+                            search: this.searchQuery
+                        });
+                        const res = await fetch(`/api/erp/portal/collection/${this.activeCollection}/?${params}`);
+                        if (res.ok) {
+                            this.collectionData = await res.json();
+                        }
+                    } catch (e) {
+                        console.error("Error fetching collection:", e);
+                    } finally {
+                        this.$nextTick(() => lucide.createIcons());
+                    }
+                },
+
+                prevPage() {
+                    if (this.pageSkip >= this.pageLimit) {
+                        this.pageSkip -= this.pageLimit;
+                        this.fetchCollectionData();
+                    }
+                },
+
+                nextPage() {
+                    if (this.pageSkip + this.pageLimit < this.collectionData.total) {
+                        this.pageSkip += this.pageLimit;
+                        this.fetchCollectionData();
+                    }
+                },
+
+                openDocModal(doc) {
+                    this.docModal = { show: true, data: doc };
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                copyDocJson() {
+                    navigator.clipboard.writeText(JSON.stringify(this.docModal.data, null, 2));
+                    this.showToast("Copied to Clipboard", "Document JSON successfully copied.", "success");
+                },
+
+                inspectBed(bedNumber) {
+                    this.showToast(`Bed #${bedNumber} Selected`, `Floor ${(bedNumber - 1) / 10 + 1 | 0}. Switching to Patient Directory.`, "info");
+                    this.switchTab('explorer');
+                    this.selectCollection('users');
+                    this.searchQuery = `bed ${bedNumber}`;
+                    this.fetchCollectionData();
+                },
+
+                async triggerExport() {
+                    this.showToast("Exporting Database", "Creating live collection JSON files & snapshot...", "info");
+                    try {
+                        const res = await fetch('/api/erp/portal/export/', { method: 'POST' });
+                        const data = await res.json();
+                        if (res.ok) {
+                            this.showToast("Export Complete", `Exported ${data.total_records} records to data_backup/`, "success");
+                            this.refreshData();
+                        } else {
+                            this.showToast("Export Failed", data.error || "Unknown error", "error");
+                        }
+                    } catch (e) {
+                        this.showToast("Export Error", e.message, "error");
+                    }
+                },
+
+                async triggerSeed() {
+                    if (!confirm("Are you sure you want to re-seed the hospital database? (50 beds and 160+ SKUs will be synchronized)")) {
+                        return;
+                    }
+                    this.showToast("Database Seeding", "Synchronizing 50 beds & 160+ SKUs...", "info");
+                    try {
+                        const res = await fetch('/api/erp/portal/seed/', { method: 'POST' });
+                        const data = await res.json();
+                        if (res.ok) {
+                            this.showToast("Seed Success", data.message || "Database seeded!", "success");
+                            this.refreshData();
+                            this.fetchCollectionData();
+                        } else {
+                            this.showToast("Seed Error", data.message || "Failed to seed", "error");
+                        }
+                    } catch (e) {
+                        this.showToast("Seed Error", e.message, "error");
+                    }
+                },
+
+                loadEndpoint(ep) {
+                    this.selectedEndpoint = ep;
+                    this.apiFormUrl = ep.url;
+                    this.apiFormBody = ep.body || '';
+                    this.apiResponseOutput = '// Ready to test. Click Send Request.';
+                    this.apiStatusCode = null;
+                    this.apiLatency = null;
+                },
+
+                async executeApiCall() {
+                    if (!this.selectedEndpoint) return;
+                    this.apiLoading = true;
+                    this.apiResponseOutput = 'Executing HTTP Request...';
+                    const startTime = performance.now();
+
+                    try {
+                        const options = {
+                            method: this.selectedEndpoint.method,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        };
+                        if (this.selectedEndpoint.method === 'POST' && this.apiFormBody.trim()) {
+                            options.body = this.apiFormBody;
+                        }
+
+                        const res = await fetch(this.apiFormUrl, options);
+                        this.apiStatusCode = res.status;
+                        this.apiLatency = Math.round(performance.now() - startTime);
+
+                        let data;
+                        const contentType = res.headers.get('content-type') || '';
+                        if (contentType.includes('application/json')) {
+                            data = await res.json();
+                            this.apiResponseOutput = JSON.stringify(data, null, 2);
+                        } else {
+                            this.apiResponseOutput = await res.text();
+                        }
+
+                        this.showToast(`API ${res.status}`, `${this.selectedEndpoint.method} ${this.apiFormUrl} completed in ${this.apiLatency}ms`, res.ok ? "success" : "error");
+                    } catch (e) {
+                        this.apiResponseOutput = `Network Error: ${e.message}`;
+                        this.showToast("Request Failed", e.message, "error");
+                    } finally {
+                        this.apiLoading = false;
+                        this.refreshData();
+                    }
+                },
+
+                async actuateDeadbolt(angle) {
+                    try {
+                        const res = await fetch('/api/erp/portal/hardware/actuate/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'toggle_deadbolt', angle })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.telemetry.hatch_locked = angle === 0;
+                            this.telemetry.servo_angle_deg = angle;
+                            this.telemetry.hatch_status = angle === 0 ? 'DEADBOLT_LOCKED' : 'HATCH_OPEN';
+                            this.showToast("Deadbolt Actuated", `SG90 Servo moved to ${angle}° (${this.telemetry.hatch_status})`, "success");
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                },
+
+                async toggleDeadbolt() {
+                    const newAngle = this.telemetry.hatch_locked ? 90 : 0;
+                    await this.actuateDeadbolt(newAngle);
+                },
+
+                async actuateLidar() {
+                    try {
+                        const dist = parseFloat(this.simLidarDistance);
+                        await fetch('/api/erp/portal/hardware/actuate/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'simulate_lidar', distance_cm: dist })
+                        });
+                        this.telemetry.lidar_distance_cm = dist;
+                        this.telemetry.obstacle_detected = dist < 40;
+                        this.telemetry.navigation_state = dist < 40 ? 'EMERGENCY_STOP' : 'PATH_CLEAR';
+                    } catch (e) {
+                        console.error(e);
+                    }
+                },
+
+                async dispatchElevator(floor) {
+                    try {
+                        const res = await fetch('/api/erp/portal/hardware/actuate/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'elevator_dispatch', floor })
+                        });
+                        if (res.ok) {
+                            this.telemetry.current_floor = floor;
+                            this.showToast("Elevator Dispatched", `Optocoupler relay closed for Floor ${floor}`, "success");
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>

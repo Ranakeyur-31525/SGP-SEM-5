@@ -13,7 +13,9 @@ The project consists of two core components:
 ```
 medibot-APP/
 ├── MediBotConsole/     # Frontend: React Native (Expo) Mobile & Tablet Console
-└── medibot_erp/        # Backend: Django REST ERP & Robot Telemetry System
+├── medibot_erp/        # Backend: Django REST ERP & Robot Telemetry System
+├── diagrams/           # Visual system architecture & workflow diagrams
+└── MediBot_Visual_System_and_Page_Flow_Documentation.pdf
 ```
 
 ### 1. [MediBotConsole](./MediBotConsole) (Frontend Console)
@@ -32,6 +34,16 @@ A robust Django REST framework backend managing hospital data and autonomous dis
 - **Robot Telemetry**: Real-time position tracking, battery monitoring, elevator interface protocols.
 - **Billing & Invoicing**: Automated invoice generation upon prescription delivery.
 - **Backup & Seed Engine**: Integrated data seeding (`seed_erp.py`) and JSON backup synchronization (`data_backup/`).
+
+### 3. Visual System & Architecture Documentation
+Comprehensive documentation and visual blueprints for hospital deployment:
+- **Full Documentation (PDF)**: [MediBot_Visual_System_and_Page_Flow_Documentation.pdf](./MediBot_Visual_System_and_Page_Flow_Documentation.pdf)
+- **High-Resolution Visual Diagrams**:
+  - [System Architecture](./diagrams/diagram_system_architecture.png)
+  - [Delivery Lifecycle](./diagrams/diagram_delivery_lifecycle.png)
+  - [Navigation & Routing Flow](./diagrams/diagram_navigation_flow.png)
+  - [Facility & Bed Matrix](./diagrams/diagram_facility_matrix.png)
+- **Generators**: Automated with [`generate_diagrams.py`](./generate_diagrams.py) and [`build_medibot_pdf.py`](./build_medibot_pdf.py).
 
 ---
 
